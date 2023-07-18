@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 
 function CreateArea(props) {
-
+  //decalred state to handle and save change in textboxes
   const [note, setNote] = useState({
     title: "", 
     content: ""
   });
 
+  //function to handle change event in input
   function handleChange(event) {
+    //destructure event.target
     const {name, value} = event.target;
     setNote((prevNote) => {
       return {
@@ -17,8 +19,10 @@ function CreateArea(props) {
     })
   }
 
+  //function to handle add note button click event
   function handleClick(event) {
     props.addNote(note);
+    setNote({title: "", content: ""});
     event.preventDefault();
   }
 
