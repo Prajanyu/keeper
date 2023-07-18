@@ -1,37 +1,68 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
+import Zoom from '@mui/material/Zoom';
+import Grow from '@mui/material/Grow';
 
 function CreateArea(props) {
-  //decalred state to handle and save change in textboxes
   const [note, setNote] = useState({
-    title: "", 
+    title: "",
     content: ""
   });
 
-  //function to handle change event in input
+  const [focus, setFocus] = useState(false);
+
   function handleChange(event) {
-    //destructure event.target
-    const {name, value} = event.target;
-    setNote((prevNote) => {
+    const { name, value } = event.target;
+
+    setNote(prevNote => {
       return {
         ...prevNote,
         [name]: value
-      }
-    })
+      };
+    });
   }
 
-  //function to handle add note button click event
-  function handleClick(event) {
-    props.addNote(note);
-    setNote({title: "", content: ""});
+  function submitNote(event) {
+    props.onAdd(note);
+    setNote({
+      title: "",
+      content: ""
+    });
     event.preventDefault();
+  }
+
+  function handleFocus() {
+    setFocus(true);
   }
 
   return (
     <div>
-      <form>
-        <input name="title" value={note.title} placeholder="Title" onChange={handleChange}/>
-        <textarea name="content" value={note.content} placeholder="Take a note..." rows="3" onChange={handleChange} />
-        <button onClick={handleClick}>Add</button>
+      <form className="create-note">
+        {focus && <Grow in={true}><input
+          name="title"
+          onChange={handleChange}
+          value={note.title}
+          placeholder="Title"
+          required
+        /></Grow>}
+
+        <Grow in={true}><textarea
+          name="content"
+          onChange={handleChange}
+          value={note.content}
+          placeholder="Take a note..."
+          rows={focus ? 3 : 1}
+          required
+          onFocus={handleFocus}
+        /></Grow>
+
+        {focus && <Zoom in={true}>
+          <Fab onClick={submitNote}>
+            <AddIcon />
+          </Fab>
+        </Zoom>}
+
       </form>
     </div>
   );

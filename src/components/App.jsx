@@ -5,32 +5,37 @@ import Note from "./Note";
 import CreateArea from "./CreateArea";
 
 function App() {
-  //declare a state array to get and save the note passed from createArea component.
   const [notes, setNotes] = useState([]);
 
   function addNote(newNote) {
-    setNotes((prevNotes) => {
+    setNotes(prevNotes => {
       return [...prevNotes, newNote];
-    })
+    });
   }
 
   function deleteNote(id) {
-    setNotes((prevNotes) => {
-      return prevNotes.filter((item, index) => {
+    setNotes(prevNotes => {
+      return prevNotes.filter((noteItem, index) => {
         return index !== id;
-      })
+      });
     });
   }
 
   return (
     <div>
       <Header />
-      <CreateArea addNote={addNote} />
-
-      {notes.map((item, index) => {
-        return <Note key={index} id={index} title={item.title} content={item.content} delete={deleteNote} />
+      <CreateArea onAdd={addNote} />
+      {notes.map((noteItem, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={noteItem.title}
+            content={noteItem.content}
+            onDelete={deleteNote}
+          />
+        );
       })}
-
       <Footer />
     </div>
   );
